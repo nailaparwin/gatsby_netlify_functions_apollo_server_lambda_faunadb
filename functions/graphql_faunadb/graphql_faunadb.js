@@ -34,17 +34,29 @@ const resolvers = {
     todos: async (parent, args, context) => {
       try {
         
-        let result = await client.query(
-          //q.Get(q.Map(q.Collection('todos')))
+        let result = await client.query(          
           q.Paginate(q.Match(q.Index("todos_owner"), 'admin'))
         );
-        //console.log('this is ',result);
-        return result.data.map(([ref, id, text, status]) => ({
-          id: ref.id,
-          uid: id,
-          text,
-          status
+        console.log('this is ',result);
+        return result.data.map(([ref, uid, text, status]) => ({
+          id: ref.id,                    
+          text: text,
+          status: status
         }));
+        // const result = await client.query(
+        //   query.Map(
+        //     query.Paginate(query.Match(query.Index("todos_by_owner"))),
+        //     query.Lambda("x", query.Get(query.Var("x")))
+        //   )
+        // );
+        // console.log('this is ',result);
+        // return result.data.map((d) => {
+        //   return {            
+        //     id: d.data.ref.id,
+        //     text: d.data.text,
+        //     status: d.data.status,            
+        //   };
+        // });
     } catch (err) {
       return err.toString();
     }
@@ -59,7 +71,7 @@ const resolvers = {
         const result = await client.query(
           q.Create(q.Collection("todos"), {
             data: {
-              text,
+              text: text,
               status: false,
               owner: 'admin'
             },
