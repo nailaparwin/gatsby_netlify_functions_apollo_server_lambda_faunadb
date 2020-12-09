@@ -5,3 +5,6 @@
 
 [context.production]
   environment = { FAUNADB_ADMIN_SECRET = "fnAD5vfK3CACB3KXlEGJU9rF4TUOYoASSq67mkE2"}
+
+ [[plugins]]
+ package = "@netlify/plugin-functions-install-core"
