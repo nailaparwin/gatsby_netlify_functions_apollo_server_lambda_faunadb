@@ -2,7 +2,7 @@
   "name": "graphql-api",
   "version": "1.0.0",
   "description": "",
-  "main": "graphql.js",
+  "main": "graphql_faunadb.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

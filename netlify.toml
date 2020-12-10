@@ -1,7 +1,7 @@
 [build]
-  command = "yarn build"
-  functions = "functions"
-  publish = "public"
+  command = "gatsby build"
+  functions = "functions/"
+  publish = "public/"
 
 [context.production]
   environment = { FAUNADB_ADMIN_SECRET = "fnAD5vfK3CACB3KXlEGJU9rF4TUOYoASSq67mkE2"}

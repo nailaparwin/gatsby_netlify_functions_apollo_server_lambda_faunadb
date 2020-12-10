@@ -1,11 +1,6 @@
 import React, { useRef, useState } from "react"
 import { useQuery, useMutation } from '@apollo/client';
 import gql from 'graphql-tag';
-
-
-
-
-
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -132,13 +127,13 @@ export default function Home() {
                     </ul> )} */}
 
                     <div className={classes.demo}>
-            <List >
+            <List>
               { !loading && !error && console.log('data', data)}
               
             {!loading && !error && (                                          
              data.todos.map((todo) => (
                
-                <ListItem>
+                <ListItem key={todo.id}>
                   <ListItemAvatar>
                     <Avatar>
                       {(todo.status) ? '🟢' : '🔴' }
@@ -177,12 +172,8 @@ export default function Home() {
                       <DeleteIcon />
                     </IconButton>
                   </ListItemSecondaryAction>
-                </ListItem>
-             
-
-
-              ))
-                     
+                </ListItem>             
+              ))                     
                    )}
             </List>
           </div>
@@ -202,7 +193,7 @@ export default function Home() {
 
           }}>
      
-     <TextField
+                <TextField
                   fullWidth
                   variant="outlined"
                   value={todo}
@@ -219,12 +210,7 @@ export default function Home() {
          
           </Grid>
           <Grid item xs={12} md={2}/>
-        </Grid>
-                
-    
-
-
-        
+        </Grid>        
       </div>
   );
     
