@@ -133,12 +133,11 @@ export default function Home() {
 
                     <div className={classes.demo}>
             <List >
-              {console.log('data', data)}
+              { !loading && !error && console.log('data', data)}
               
-            {!loading && !error && (
-         
-                                 
+            {!loading && !error && (                                          
              data.todos.map((todo) => (
+               
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar>

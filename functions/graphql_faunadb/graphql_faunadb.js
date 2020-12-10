@@ -2,12 +2,12 @@
 
 const { ApolloServer, gql } = require("apollo-server-lambda");
 const faunadb = require('faunadb'),
-  q = faunadb.query;
+q = faunadb.query;
   require("dotenv").config()
 
 const typeDefs = gql`
 type Query {
-  todos: [Todo]!
+  todos: [Todo!]
 }
 
 type Todo {
@@ -24,8 +24,8 @@ type Mutation {
 `;
 
 
-const todos = {};
-let todoIndex = 0;
+//const todos = {};
+//let todoIndex = 0;
 var client = new faunadb.Client({ secret: process.env.FAUNADB_ADMIN_SECRET });
 
 const resolvers = {
@@ -33,37 +33,39 @@ const resolvers = {
     
     todos: async (parent, args, context) => {
       try {
-        
-        let result = await client.query(          
-          q.Paginate(q.Match(q.Index("todos_owner"), 'admin'))
+        let result = await client.query(   
+        q.Map(
+          q.Paginate(q.Documents(q.Collection('todos'))),
+          q.Lambda(x => q.Get(x))
+        )
         );
-        console.log('this is ',result);
-        result.data.map(([ref, uid, text, status]) => {
-          console.log(ref.id)
-          console.log(uid)
-          console.log(text)
-          console.log('status', status)
-        })
-          
-        return result.data.map(([ref, uid, text, status]) => ({
-          id: ref.id,                    
-          text: text,
-          status: status
+        
+        return result.data.map((d) => ({
+          id: d.ref.id,                    
+          text: d.data.text,
+          status: d.data.status
         }));
-        // const result = await client.query(
-        //   query.Map(
-        //     query.Paginate(query.Match(query.Index("todos_by_owner"))),
-        //     query.Lambda("x", query.Get(query.Var("x")))
-        //   )
+
+
+        // console.log('in')
+        // let result = await client.query(          
+        //   q.Paginate(q.Match(q.Index("todos_owner"), 'admin'))
         // );
         // console.log('this is ',result);
-        // return result.data.map((d) => {
-        //   return {            
-        //     id: d.data.ref.id,
-        //     text: d.data.text,
-        //     status: d.data.status,            
-        //   };
-        // });
+        // result.data.map(([ref, uid, text, status]) => {
+        //   console.log(ref.id)
+        //   console.log(uid)
+        //   console.log(text)
+        //   console.log('status', status)
+        // })
+          
+        // return result.data.map(([ref, uid, text, status]) => ({
+        //   id: ref.id,                    
+        //   text: text,
+        //   status: status
+        // }));
+
+        
     } catch (err) {
       return err.toString();
     }
