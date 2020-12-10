@@ -3,7 +3,7 @@
 const { ApolloServer, gql } = require("apollo-server-lambda");
 const faunadb = require('faunadb'),
   q = faunadb.query;
-
+  require("dotenv").config()
 
 const typeDefs = gql`
 type Query {
@@ -11,7 +11,7 @@ type Query {
 }
 
 type Todo {
-  id: ID!
+  id: ID
   text: String!
   status: Boolean!
 }
@@ -38,6 +38,13 @@ const resolvers = {
           q.Paginate(q.Match(q.Index("todos_owner"), 'admin'))
         );
         console.log('this is ',result);
+        result.data.map(([ref, uid, text, status]) => {
+          console.log(ref.id)
+          console.log(uid)
+          console.log(text)
+          console.log('status', status)
+        })
+          
         return result.data.map(([ref, uid, text, status]) => ({
           id: ref.id,                    
           text: text,
